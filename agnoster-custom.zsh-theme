@@ -227,6 +227,7 @@ build_prompt() {
 }
 
 PROMPT=$'%{%f%b%k%}$(build_prompt) 
- \e[0;32m%}$PROMPT_ARROW%{\e[0m%} '
+ %{\e[0;32m%}$PROMPT_ARROW%{\e[0m%} '
+
 RPROMPT=$'$(prompt_git)  '
 
