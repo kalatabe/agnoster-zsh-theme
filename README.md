@@ -13,4 +13,4 @@ Refer to the [project README](https://github.com/agnoster/agnoster-zsh-theme/blo
 
 Shown here using Linux Mint MATE's default `mate-terminal` app
 
-![Screenshot](https://gist.githubusercontent.com/kdoichinov/cdd55697b1e084fe00eea81632166f5e/raw/f7d48dd20123c74b4ee75ed0cbc6c32d98cd6a19/screenshot2.png)
+![Screenshot](http://i.imgur.com/id7t4sm.jpg)
