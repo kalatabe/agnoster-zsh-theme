@@ -30,6 +30,7 @@
 
 CURRENT_BG='NONE'
 PROMPT_ARROW=$'\u227b'
+VI_PROMPT=$'\u475'
 
 # Special Powerline characters
 
@@ -227,7 +228,16 @@ build_prompt() {
 }
 
 PROMPT=$'%{%f%b%k%}$(build_prompt) 
- %{\e[0;32m%}$PROMPT_ARROW%{\e[0m%} '
+ %{\e[0;32m%}$(vi_prompt_status) $PROMPT_ARROW%{\e[0m%} '
 
-RPROMPT=$'$(prompt_git)  '
+VIMODE=''
+vi_prompt_status() {
+    if [[ ! -z $(vi_mode_prompt_info) ]]; then
+        echo "%{$fg_bold[red]%}%{$fg[red]%}$VI_PROMPT%{$reset_color%}"
+    else
+        echo " "
+    fi
+}
+
+RPROMPT=$'$(prompt_git) '
 
