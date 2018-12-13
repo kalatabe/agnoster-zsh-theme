@@ -210,6 +210,13 @@ prompt_status() {
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  
+  # Check if we have root. Disabled for security reasons, also pollutes the logs with messages like:
+  # Dec 13 15:25:30 blerch sudo:  kaloyan : TTY=pts/6 ; PWD=/home/kaloyan ; USER=root ; COMMAND=/bin/true
+  # Dec 13 15:25:30 blerch sudo: pam_unix(sudo:session): session opened for user root by (uid=0)
+  # Dec 13 15:25:30 blerch sudo: pam_unix(sudo:session): session closed for user root
+  #sudo -n true 2>/dev/null 
+  #[[ $? -eq 0 ]] && symbols+="%{%F{red}%}⛧ "
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
