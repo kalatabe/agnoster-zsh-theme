@@ -30,7 +30,8 @@
 
 CURRENT_BG='NONE'
 PROMPT_ARROW=$'\u227b'
-VI_PROMPT=$'\u475'
+#VI_PROMPT=$'\u475'
+VI_PROMPT=$'\u2175'
 
 # Special Powerline characters
 
@@ -207,12 +208,13 @@ prompt_virtualenv() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘ "
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙ "
 
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
+
 
 ## Main prompt
 build_prompt() {
@@ -221,9 +223,9 @@ build_prompt() {
   prompt_virtualenv
   prompt_context
   prompt_dir
-  #prompt_git
-  prompt_bzr
-  prompt_hg
+#  prompt_git
+#  prompt_bzr
+#  prompt_hg
   prompt_end
 }
 
@@ -239,5 +241,5 @@ vi_prompt_status() {
     fi
 }
 
-RPROMPT=$'$(prompt_git) '
+RPROMPT=$' $(prompt_git) '
 
