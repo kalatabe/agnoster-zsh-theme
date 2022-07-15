@@ -27,6 +27,7 @@
 
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
+setopt PROMPT_SUBST
 
 CURRENT_BG='NONE'
 PROMPT_ARROW=$'\u227b'
@@ -211,7 +212,6 @@ prompt_status() {
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘ "
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙ "
-  
   # Check if we have root. Disabled for security reasons, also pollutes the logs with messages like:
   # Dec 13 15:25:30 blerch sudo:  kaloyan : TTY=pts/6 ; PWD=/home/kaloyan ; USER=root ; COMMAND=/bin/true
   # Dec 13 15:25:30 blerch sudo: pam_unix(sudo:session): session opened for user root by (uid=0)
@@ -223,30 +223,36 @@ prompt_status() {
 }
 
 
-## Main prompt
+## Options
+THEME_PROMPT_PREFIX=${THEME_PROMPT_PREFIX:-' '}
+THEME_VI_INS_MODE_SYMBOL=${THEME_VI_INS_MODE_SYMBOL:-' '}
+THEME_VI_CMD_MODE_SYMBOL=${THEME_VI_CMD_MODE_SYMBOL:-"ⅵ"}
+
+## Set symbol for the initial mode
+THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
   prompt_context
   prompt_dir
-#  prompt_git
-#  prompt_bzr
-#  prompt_hg
   prompt_end
 }
 
 PROMPT=$'%{%f%b%k%}$(build_prompt) 
- %{\e[0;32m%}$(vi_prompt_status) $PROMPT_ARROW%{\e[0m%} '
-
-VIMODE=''
-vi_prompt_status() {
-    if [[ ! -z $(vi_mode_prompt_info) ]]; then
-        echo "%{$fg_bold[red]%}%{$fg[red]%}$VI_PROMPT%{$reset_color%}"
-    else
-        echo " "
-    fi
-}
+ %{\e[31m%}%{\e[1m%}${THEME_VI_MODE_SYMBOL} %{\e[0m%}%{\e[0;32m%} $PROMPT_ARROW%{\e[0m%} '
 
 RPROMPT=$' $(prompt_git) '
+
+zle-keymap-select() {
+  if [ "${KEYMAP}" = 'vicmd' ]; then
+    THEME_VI_MODE_SYMBOL="${THEME_VI_CMD_MODE_SYMBOL}"
+  else
+    THEME_VI_MODE_SYMBOL="${THEME_VI_INS_MODE_SYMBOL}"
+  fi
+
+  zle reset-prompt
+}
+zle -N zle-keymap-select
 
